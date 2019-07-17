@@ -32,7 +32,7 @@
       [(conj d1 d2)    `(and ,(obj->sexp d1) ,(obj->sexp d2))]
       [(impl d1 d2)    `(if ,(obj->sexp d1) ,(obj->sexp d2))]
       [(neg d1)        `(not ,(obj->sexp d1))]
-      [(all d1)        `(∀, (obj->sexp d1))]
+      [(all d1)        `(∀ ,(obj->sexp d1))]
       [(app d1 d2)     (list d1 d2)]
       [(? procedure?)  (obj-proc->sexp denotation)]
       [(? symbol?)     denotation]
@@ -92,7 +92,6 @@
           [[bv ≫ bv- : σ.norm] ... ⊢ body ≫ body- ⇒ τ]
           ----
           [⊢ (lingobj #'τ (internal (λ- (bv- ...) body-))) ⇒ τ]])]))
-
 
 (define-typed-syntax λ
   [(_ (x:id) body:expr)
