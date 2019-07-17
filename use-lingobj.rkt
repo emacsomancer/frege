@@ -8,6 +8,7 @@
 
 ;; type <e,t> definitions
 (defden drinks (-> e t) #:abstract)
+(defden snores (-> e t) #:abstract)
 (defden man (-> e t) #:abstract)
 (defden F (-> e t)     ; arbitrary function definition for 'drinks'
   (λ (x) (drinks x)))
@@ -29,4 +30,15 @@
       (∀ ([x e])
          (if (P x) (Q x))))))
 
+;; misc. testing defs.
+(defden test01 (-> e (-> (-> e t) t))
+  (λ (x)
+    (λ (P)
+      (P x))))
+
+(defden test02 (-> e (-> (-> e t ) (-> (-> e t) t)))
+  (λ (x)
+    (λ (P)
+      (λ (Q)
+        (if (P x) (Q x))))))
 
