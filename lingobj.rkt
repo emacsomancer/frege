@@ -1,4 +1,4 @@
-#lang turnstile/lang
+b#lang turnstile/lang
 
 (provide (rename-out [L:#%app #%app]
                      [λ       lambda])
