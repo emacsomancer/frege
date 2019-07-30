@@ -32,7 +32,6 @@
   ;                              [[list symbol? ...n] -> Denotation])
   
   (struct lingobj [type den]
-    #:transparent
     #:methods gen:custom-write
     [(define (write-proc obj port mode)
        (display (obj->sexp obj) port)
@@ -42,41 +41,30 @@
   (struct binder [names types proc])
 
   (define (obj->sexp obj)
-    (define denotation (lingobj-den obj))
-    (match denotation
+    (define den (lingobj-den obj))
+    (match den
+      [(lam b)         (binder->sexp 'λ b)]
+      [(app d1 d2)     `(,d1 ,d2)]
       [(conj d1 d2)    `(and ,(obj->sexp d1) ,(obj->sexp d2))]
       [(impl d1 d2)    `(if ,(obj->sexp d1) ,(obj->sexp d2))]
       [(neg d1)        `(not ,(obj->sexp d1))]
       [(all d1)        (binder->sexp '∀ d1)]
-      [(lam d1)        (binder->sexp 'λ d1)]
-      [(app d1 d2)     (list d1 d2)]
-      [(? symbol?)     denotation]
-      [any             (error 'obj->sexp "not a valid lingobj")]))
+      [(? symbol?)     den]
+      [any             (error 'obj->sexp "not a valid lingobj: ~a" den)]))
 
   (define (binder->sexp head binder)
     (list head
-          (map (λ (x t) (format "[~a ~a]" x (type->str t)))
+          (map (λ (x t) (list x (type->str t)))
                (binder-names binder)
                (binder-types binder))
           (apply (binder-proc binder) (binder-names binder))))
-
-  (struct lam [b]
-    #:transparent)
-  
-  (struct app [d1 d2]
-    #:transparent)
-
-  (struct conj [d1 d2]
-    #:transparent)
-
-  (struct impl [d1 d2]
-    #:transparent)
-
-  (struct neg [d]
-    #:transparent)
-
-  (struct all [b]
-    #:transparent))
+ 
+  (struct lam [b])
+  (struct app [d1 d2])
+  (struct conj [d1 d2])
+  (struct impl [d1 d2])
+  (struct neg [d])
+  (struct all [b]))
 
 (require 'run-time)
 
