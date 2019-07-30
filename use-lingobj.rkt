@@ -1,23 +1,23 @@
 #lang s-exp "lingobj.rkt"
 
 ;; type e definitions
-(defden john e #:abstract)
-(defden bill e #:abstract)
-(defden sally e #:abstract)
-(defden mary e #:abstract)
+(defden john e #:uninterpreted)
+(defden bill e #:uninterpreted)
+(defden sally e #:uninterpreted)
+(defden mary e #:uninterpreted)
 
 ;; type <e,t> definitions
-(defden drinks (-> e t) #:abstract)
-(defden snores (-> e t) #:abstract)
-(defden man (-> e t) #:abstract)
+(defden drinks (-> e t) #:uninterpreted)
+(defden snores (-> e t) #:uninterpreted)
+(defden man (-> e t) #:uninterpreted)
 (defden F (-> e t)     ; arbitrary function definition for 'drinks'
   (λ (x) (drinks x)))
 
 ;; type <e,<e,t>> definitions
-(defden loves (-> e (-> e t)) #:abstract)
+(defden loves (-> e (-> e t)) #:uninterpreted)
 
 ;; type <e,<e,<e,t>>> definitions
-(defden introduces (-> e (-> e (-> e t))) #:abstract)
+(defden introduces (-> e (-> e (-> e t))) #:uninterpreted)
 
 ;; type <<e,t>,t> definitions
 (defden mary-gq (-> (-> e t) t)   ; 'generalised quantifier' version of Mary

@@ -168,7 +168,7 @@
 
 
 (define-typed-syntax defden
-  [(_ x:id τ:type #:abstract)
+  [(_ x:id τ:type #:uninterpreted)
    ≫
    ----
    [≻ (define-typed-variable x (lingobj #'τ.norm (quote- x)) ⇒ τ.norm)]]
