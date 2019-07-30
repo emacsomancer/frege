@@ -42,3 +42,17 @@
       (λ (Q)
         (if (P x) (Q x))))))
 
+(defden test03 (-> e (-> (-> e t) t))
+  (λ ([x e])
+    (λ (P)
+      (P x))))
+
+(defden |Everyone who drinks loves Bill.|
+  ((every drinks) (λ ([who e]) ((who loves) bill))))
+
+(defden |Everyone who loves Bill drinks.|
+  ((every (λ ([who e]) ((who loves) bill))) drinks))
+
+(defden |Everyone who Bill loves drinks.|
+  ((every (bill loves)) drinks))
+
