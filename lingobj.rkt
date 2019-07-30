@@ -79,15 +79,17 @@
   (syntax-parser
     [(_ (external:id (bv:id ...+) body:id) internal:id)
      #:with (bv- ...) (generate-temporaries #'(bv ...))
+     #:with (σ ...) (generate-temporaries #'(bv ...))
+     #:with (σ.norm ...) (stx-map (λ (σ) (format-id σ "~a.norm" σ)) #'(σ ...))
      #'(define-typed-syntax external
-         [(_ ([(~var bv id) σ:type] ...) (~var body expr))
+         [(_ ([(~var bv id) (~var σ type)] ...) (~var body expr))
           ⇐ τ
           ≫
           [[bv ≫ bv- : σ.norm] ... ⊢ body ≫ body- ⇐ τ]
           ----
           [⊢ (lingobj #'τ (internal (λ- (bv- ...) body-)))]]
          
-         [(_ ([(~var bv id) σ:type] ...) (~var body expr))
+         [(_ ([(~var bv id) (~var σ type)] ...) (~var body expr))
           ≫
           [[bv ≫ bv- : σ.norm] ... ⊢ body ≫ body- ⇒ τ]
           ----
