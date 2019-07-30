@@ -14,6 +14,22 @@
   (provide (all-defined-out))
   (require racket/match)
   (require (for-template (only-in turnstile/base type->str)))
+
+  ; A LingObj is (make-lingobj type? Denotation)
+  ;
+  ;   where
+  ;
+  ; A Denotation is one of:
+  ;  - (lam [Binder 1])
+  ;  - (app Denotation Denotation)
+  ;  - (conj Denotation Denotation)
+  ;  - (impl Denotation Denotation)
+  ;  - (neg Denotation)
+  ;  - (all [Binder n])
+  ;
+  ; A [Binder n] is (make-binder [list symbol? ...n]
+  ;                              [list type? ...n]
+  ;                              [[list symbol? ...n] -> Denotation])
   
   (struct lingobj [type den]
     #:transparent
@@ -23,21 +39,30 @@
        (display ":" port)
        (display (type->str (lingobj-type obj)) port))])
 
-  (define (obj-proc->sexp proc)
-    `(λ (x) ,(proc 'x)))
-  
+  (struct binder [names types proc])
+
   (define (obj->sexp obj)
     (define denotation (lingobj-den obj))
     (match denotation
       [(conj d1 d2)    `(and ,(obj->sexp d1) ,(obj->sexp d2))]
       [(impl d1 d2)    `(if ,(obj->sexp d1) ,(obj->sexp d2))]
       [(neg d1)        `(not ,(obj->sexp d1))]
-      [(all d1)        `(∀ ,(obj->sexp d1))]
+      [(all d1)        (binder->sexp '∀ d1)]
+      [(lam d1)        (binder->sexp 'λ d1)]
       [(app d1 d2)     (list d1 d2)]
-      [(? procedure?)  (obj-proc->sexp denotation)]
       [(? symbol?)     denotation]
       [any             (error 'obj->sexp "not a valid lingobj")]))
 
+  (define (binder->sexp head binder)
+    (list head
+          (map (λ (x t) (format "[~a ~a]" x (type->str t)))
+               (binder-names binder)
+               (binder-types binder))
+          (apply (binder-proc binder) (binder-names binder))))
+
+  (struct lam [b]
+    #:transparent)
+  
   (struct app [d1 d2]
     #:transparent)
 
@@ -50,7 +75,7 @@
   (struct neg [d]
     #:transparent)
 
-  (struct all [d]
+  (struct all [b]
     #:transparent))
 
 (require 'run-time)
@@ -87,7 +112,9 @@
           ≫
           [[bv ≫ bv- : σ.norm] ... ⊢ body ≫ body- ⇐ τ]
           ----
-          [⊢ (lingobj #'τ (internal (λ- (bv- ...) body-)))]]
+          [⊢ (lingobj #'τ (internal (binder '(bv ...)
+                                            (list #'σ.norm ...)
+                                            (λ- (bv- ...) body-))))]]
          
          [(_ ([(~var bv id) (~var σ type)] ...) (~var body expr))
           ≫
@@ -101,14 +128,17 @@
    ≫
    [[x ≫ x- : dom] ⊢ [body ≫ body- ⇐ cod]]
    ----
-   [⊢ (lingobj #'(-> dom cod) (λ- (x-) body-))]]
+   [⊢ (lingobj #'(-> dom cod)
+               (lam (binder '(x) (list #'dom) (λ- (x-) body-))))]]
 
   [(_ (x:id τ:type) body:expr)
    ≫
    #:with dom #'τ.norm
    [[x ≫ x- : dom] ⊢ [body ≫ body- ⇒ cod]]
    ----
-   [⊢ (lingobj #'(-> dom cod) (λ- (x-) body-)) ⇒ (-> dom cod)]])
+   [⊢ (lingobj #'(-> dom cod)
+               (lam (binder '(x) (list #'dom) (λ- (x-) body-))))
+      ⇒ (-> dom cod)]])
 
 
 (define-typed-syntax L:#%app
