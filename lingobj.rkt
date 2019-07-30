@@ -2,7 +2,7 @@
 
 (provide (rename-out [L:#%app #%app]
                      [λ       lambda])
-         λ and if ∀ not
+         λ and when ∀ not
          defden
          (rename-out [#%app $]) lingobj-den
          (type-out e t ->))
@@ -161,7 +161,7 @@
 
 
 (define-ling-syntax/lift (and d1 d2) conj)
-(define-ling-syntax/lift (if d1 d2) impl)
+(define-ling-syntax/lift (when d1 d2) impl)
 (define-ling-syntax/lift (not d1) neg)
 
 (define-binding-ling-syntax/lift (∀ (x) d1) all)

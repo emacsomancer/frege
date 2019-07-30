@@ -28,7 +28,7 @@
   (λ (P)
     (λ (Q)
       (∀ ([x e])
-         (if (P x) (Q x))))))
+         (when (P x) (Q x))))))
 
 ;; misc. testing defs.
 (defden test01 (-> e (-> (-> e t) t))
@@ -40,7 +40,7 @@
   (λ (x)
     (λ (P)
       (λ (Q)
-        (if (P x) (Q x))))))
+        (when (P x) (Q x))))))
 
 (defden test03 (-> e (-> (-> e t) t))
   (λ ([x e])
