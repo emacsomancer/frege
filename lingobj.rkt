@@ -119,7 +119,7 @@
    [⊢ (lingobj #'(-> dom cod)
                (lam (binder '(x) (list #'dom) (λ- (x-) body-))))]]
 
-  [(_ (x:id τ:type) body:expr)
+  [(_ ([x:id τ:type]) body:expr)
    ≫
    #:with dom #'τ.norm
    [[x ≫ x- : dom] ⊢ [body ≫ body- ⇒ cod]]
