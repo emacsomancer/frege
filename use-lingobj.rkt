@@ -42,7 +42,7 @@
       (λ (Q)
         (if (P x) (Q x))))))
 
-(defden test03
+(defden test03 (-> e (-> (-> e t) t))
   (λ ([x e])
-    (λ ([P (-> e t)])
+    (λ (P)
       (P x))))

@@ -120,6 +120,17 @@
                (lam (binder '(x) (list #'dom) (λ- (x-) body-))))]]
 
   [(_ ([x:id τ:type]) body:expr)
+   ⇐ (~-> dom cod)
+   ≫
+   #:fail-unless (type=? #'dom #'τ.norm)
+   (format "expected domain ~a ≠ annotation ~a"
+           (type->str #'dom) (type->str #'τ.norm))
+   [[x ≫ x- : dom] ⊢ [body ≫ body- ⇐ cod]]
+   ----
+   [⊢ (lingobj #'(-> dom cod)
+               (lam (binder '(x) (list #'dom) (λ- (x-) body-))))]]
+  
+  [(_ ([x:id τ:type]) body:expr)
    ≫
    #:with dom #'τ.norm
    [[x ≫ x- : dom] ⊢ [body ≫ body- ⇒ cod]]
