@@ -7,6 +7,16 @@
          (rename-out [#%app $]) lingobj-den
          (type-out e t ->))
 
+;; Base types are:
+;;
+;; {e, t}, where:
+;; 
+;; - e is the type of individuals
+;; - t is the type of truth values (propositions)
+;; - for any α,β, if α,β are valid types, then:
+;;    <α,β> is a valid type
+;;   [currently written: (-> α β)]
+
 (define-base-types e t)
 (define-type-constructor -> #:arity = 2)
 
@@ -23,7 +33,9 @@
   ;  - (lam [Binder 1])
   ;  - (app Denotation Denotation)
   ;  - (conj Denotation Denotation)
+  ;  - (disj Denotation Denotation)  
   ;  - (impl Denotation Denotation)
+  ;  - (biimpl Denotation Denotation)
   ;  - (neg Denotation)
   ;  - (all [Binder n])
   ;  - (exists [Binder n])  
@@ -171,7 +183,7 @@
 (define-ling-syntax/lift (and d1 d2) conj)
 (define-ling-syntax/lift (or d1 d2) disj)
 (define-ling-syntax/lift (when d1 d2) impl)
-(define-ling-syntax/lift (wwhen d1 d2) biimpl)
+(define-ling-syntax/lift (wwhen d1 d2) biimpl) ; = iff
 (define-ling-syntax/lift (not d1) neg)
 
 
