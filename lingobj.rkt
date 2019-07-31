@@ -2,7 +2,7 @@
 
 (provide (rename-out [L:#%app #%app]
                      [λ       lambda])
-         λ and when ∀ not
+         λ and when ∀ ∃ not
          defden
          (rename-out [#%app $]) lingobj-den
          (type-out e t ->))
@@ -26,6 +26,7 @@
   ;  - (impl Denotation Denotation)
   ;  - (neg Denotation)
   ;  - (all [Binder n])
+  ;  - (exists [Binder n])  
   ;
   ; A [Binder n] is (make-binder [list symbol? ...n]
   ;                              [list type? ...n]
@@ -49,6 +50,7 @@
       [(impl d1 d2)    `(if ,(obj->sexp d1) ,(obj->sexp d2))]
       [(neg d1)        `(not ,(obj->sexp d1))]
       [(all d1)        (binder->sexp '∀ d1)]
+      [(exists d1)     (binder->sexp '∃ d1)]
       [(? symbol?)     den]
       [any             (error 'obj->sexp "not a valid lingobj: ~a" den)]))
 
@@ -58,13 +60,15 @@
                (binder-names binder)
                (binder-types binder))
           (apply (binder-proc binder) (binder-names binder))))
- 
+  
   (struct lam [b])
   (struct app [d1 d2])
   (struct conj [d1 d2])
   (struct impl [d1 d2])
   (struct neg [d])
-  (struct all [b]))
+  (struct all [b])
+  (struct exists [b]))
+
 
 (require 'run-time)
 
@@ -165,6 +169,7 @@
 (define-ling-syntax/lift (not d1) neg)
 
 (define-binding-ling-syntax/lift (∀ (x) d1) all)
+(define-binding-ling-syntax/lift (∃ (x) d1) all)
 
 
 (define-typed-syntax defden

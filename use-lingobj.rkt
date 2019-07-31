@@ -30,6 +30,14 @@
       (∀ ([x e])
          (when (P x) (Q x))))))
 
+;; type <<e,t>,<<e,t>,t>> definitions
+(defden some (-> (-> e t) (-> (-> e t) t))
+  (λ (P)
+    (λ (Q)
+      (∃ ([x e])
+         (and (P x) (Q x))))))
+
+
 ;; misc. testing defs.
 (defden test01 (-> e (-> (-> e t) t))
   (λ (x)
@@ -55,3 +63,6 @@
 
 (defden |Everyone who Bill loves drinks.|
   ((every (bill loves)) drinks))
+
+(defden |Some man snores.|
+  ((some man) snores))
