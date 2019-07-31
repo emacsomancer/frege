@@ -2,7 +2,7 @@
 
 (provide (rename-out [L:#%app #%app]
                      [λ       lambda])
-         λ and or when ∀ ∃ not
+         λ and or when wwhen ∀ ∃ not
          defden
          (rename-out [#%app $]) lingobj-den
          (type-out e t ->))
@@ -49,6 +49,7 @@
       [(conj d1 d2)    `(and ,(obj->sexp d1) ,(obj->sexp d2))]
       [(disj d1 d2)    `(or ,(obj->sexp d1) ,(obj->sexp d2))]      
       [(impl d1 d2)    `(if ,(obj->sexp d1) ,(obj->sexp d2))]
+      [(biimpl d1 d2)  `(and (if ,(obj->sexp d1) ,(obj->sexp d2)) (if ,(obj->sexp d2) ,(obj->sexp d1)))]
       [(neg d1)        `(not ,(obj->sexp d1))]
       [(all d1)        (binder->sexp '∀ d1)]
       [(exists d1)     (binder->sexp '∃ d1)]
@@ -67,6 +68,7 @@
   (struct conj [d1 d2])
   (struct disj [d1 d2])  
   (struct impl [d1 d2])
+  (struct biimpl [d1 d2])  
   (struct neg [d])
   (struct all [b])
   (struct exists [b]))
@@ -169,6 +171,7 @@
 (define-ling-syntax/lift (and d1 d2) conj)
 (define-ling-syntax/lift (or d1 d2) disj)
 (define-ling-syntax/lift (when d1 d2) impl)
+(define-ling-syntax/lift (wwhen d1 d2) biimpl)
 (define-ling-syntax/lift (not d1) neg)
 
 
