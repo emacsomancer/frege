@@ -2,7 +2,7 @@
 
 (provide (rename-out [L:#%app #%app]
                      [λ       lambda])
-         λ and if ∀ not
+         λ and or when wwhen ∀ ∃ not
          defden
          (rename-out [#%app $]) lingobj-den
          (type-out e t ->))
@@ -14,44 +14,65 @@
   (provide (all-defined-out))
   (require racket/match)
   (require (for-template (only-in turnstile/base type->str)))
+
+  ; A LingObj is (make-lingobj type? Denotation)
+  ;
+  ;   where
+  ;
+  ; A Denotation is one of:
+  ;  - (lam [Binder 1])
+  ;  - (app Denotation Denotation)
+  ;  - (conj Denotation Denotation)
+  ;  - (impl Denotation Denotation)
+  ;  - (neg Denotation)
+  ;  - (all [Binder n])
+  ;  - (exists [Binder n])  
+  ;
+  ; A [Binder n] is (make-binder [list symbol? ...n]
+  ;                              [list type? ...n]
+  ;                              [[list symbol? ...n] -> Denotation])
   
   (struct lingobj [type den]
-    #:transparent
     #:methods gen:custom-write
     [(define (write-proc obj port mode)
        (display (obj->sexp obj) port)
        (display ":" port)
        (display (type->str (lingobj-type obj)) port))])
 
-  (define (obj-proc->sexp proc)
-    `(λ (x) ,(proc 'x)))
-  
+  (struct binder [names types proc])
+
   (define (obj->sexp obj)
-    (define denotation (lingobj-den obj))
-    (match denotation
+    (define den (lingobj-den obj))
+    (match den
+      [(lam b)         (binder->sexp 'λ b)]
+      [(app d1 d2)     `(,d1 ,d2)]
       [(conj d1 d2)    `(and ,(obj->sexp d1) ,(obj->sexp d2))]
+      [(disj d1 d2)    `(or ,(obj->sexp d1) ,(obj->sexp d2))]      
       [(impl d1 d2)    `(if ,(obj->sexp d1) ,(obj->sexp d2))]
+      [(biimpl d1 d2)  `(and (if ,(obj->sexp d1) ,(obj->sexp d2)) (if ,(obj->sexp d2) ,(obj->sexp d1)))]
       [(neg d1)        `(not ,(obj->sexp d1))]
-      [(all d1)        `(∀ ,(obj->sexp d1))]
-      [(app d1 d2)     (list d1 d2)]
-      [(? procedure?)  (obj-proc->sexp denotation)]
-      [(? symbol?)     denotation]
-      [any             (error 'obj->sexp "not a valid lingobj")]))
+      [(all d1)        (binder->sexp '∀ d1)]
+      [(exists d1)     (binder->sexp '∃ d1)]
+      [(? symbol?)     den]
+      [any             (error 'obj->sexp "not a valid lingobj: ~a" den)]))
 
-  (struct app [d1 d2]
-    #:transparent)
+  (define (binder->sexp head binder)
+    (list head
+          (map (λ (x t) (list x (type->str t)))
+               (binder-names binder)
+               (binder-types binder))
+          (apply (binder-proc binder) (binder-names binder))))
+  
+  (struct lam [b])
+  (struct app [d1 d2])
+  (struct conj [d1 d2])
+  (struct disj [d1 d2])  
+  (struct impl [d1 d2])
+  (struct biimpl [d1 d2])  
+  (struct neg [d])
+  (struct all [b])
+  (struct exists [b]))
 
-  (struct conj [d1 d2]
-    #:transparent)
-
-  (struct impl [d1 d2]
-    #:transparent)
-
-  (struct neg [d]
-    #:transparent)
-
-  (struct all [d]
-    #:transparent))
 
 (require 'run-time)
 
@@ -87,7 +108,9 @@
           ≫
           [[bv ≫ bv- : σ.norm] ... ⊢ body ≫ body- ⇐ τ]
           ----
-          [⊢ (lingobj #'τ (internal (λ- (bv- ...) body-)))]]
+          [⊢ (lingobj #'τ (internal (binder '(bv ...)
+                                            (list #'σ.norm ...)
+                                            (λ- (bv- ...) body-))))]]
          
          [(_ ([(~var bv id) (~var σ type)] ...) (~var body expr))
           ≫
@@ -101,14 +124,28 @@
    ≫
    [[x ≫ x- : dom] ⊢ [body ≫ body- ⇐ cod]]
    ----
-   [⊢ (lingobj #'(-> dom cod) (λ- (x-) body-))]]
+   [⊢ (lingobj #'(-> dom cod)
+               (lam (binder '(x) (list #'dom) (λ- (x-) body-))))]]
 
-  [(_ (x:id τ:type) body:expr)
+  [(_ ([x:id τ:type]) body:expr)
+   ⇐ (~-> dom cod)
+   ≫
+   #:fail-unless (type=? #'dom #'τ.norm)
+   (format "expected domain ~a ≠ annotation ~a"
+           (type->str #'dom) (type->str #'τ.norm))
+   [[x ≫ x- : dom] ⊢ [body ≫ body- ⇐ cod]]
+   ----
+   [⊢ (lingobj #'(-> dom cod)
+               (lam (binder '(x) (list #'dom) (λ- (x-) body-))))]]
+  
+  [(_ ([x:id τ:type]) body:expr)
    ≫
    #:with dom #'τ.norm
    [[x ≫ x- : dom] ⊢ [body ≫ body- ⇒ cod]]
    ----
-   [⊢ (lingobj #'(-> dom cod) (λ- (x-) body-)) ⇒ (-> dom cod)]])
+   [⊢ (lingobj #'(-> dom cod)
+               (lam (binder '(x) (list #'dom) (λ- (x-) body-))))
+      ⇒ (-> dom cod)]])
 
 
 (define-typed-syntax L:#%app
@@ -132,14 +169,18 @@
 
 
 (define-ling-syntax/lift (and d1 d2) conj)
-(define-ling-syntax/lift (if d1 d2) impl)
+(define-ling-syntax/lift (or d1 d2) disj)
+(define-ling-syntax/lift (when d1 d2) impl)
+(define-ling-syntax/lift (wwhen d1 d2) biimpl)
 (define-ling-syntax/lift (not d1) neg)
 
+
 (define-binding-ling-syntax/lift (∀ (x) d1) all)
+(define-binding-ling-syntax/lift (∃ (x) d1) all)
 
 
 (define-typed-syntax defden
-  [(_ x:id τ:type #:abstract)
+  [(_ x:id τ:type #:uninterpreted)
    ≫
    ----
    [≻ (define-typed-variable x (lingobj #'τ.norm (quote- x)) ⇒ τ.norm)]]
