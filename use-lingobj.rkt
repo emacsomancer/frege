@@ -14,7 +14,11 @@
   (λ (x) (drinks x)))
 
 ;; type <e,<e,t>> definitions
-(defden loves (-> e (-> e t)) #:uninterpreted)
+(defden Loves (-> e (-> e t)) #:uninterpreted)  ; 
+(defden loves (-> e (-> e t))                   ; really shouldn't be uninterpreted, so define 'dummy' uninterpreted 'Loves' to refer to
+  (λ (y)
+    (λ (x)
+      (y (Loves x)))))
 
 ;; type <e,<e,<e,t>>> definitions
 (defden introduces (-> e (-> e (-> e t))) #:uninterpreted)
