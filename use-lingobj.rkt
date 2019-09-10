@@ -7,21 +7,37 @@
 (defden mary e #:uninterpreted)
 
 ;; type <e,t> definitions
-(defden drinks (-> e t) #:uninterpreted)
-(defden snores (-> e t) #:uninterpreted)
-(defden man (-> e t) #:uninterpreted)
-(defden F (-> e t)     ; arbitrary function definition for 'drinks'
-  (λ (x) (drinks x)))
+; really shouldn't be uninterpreted, so define 'dummy' uninterpreted preds to refer to (with Uppercase)
+(defden Drinks (-> e t) #:uninterpreted)
+(defden drinks (-> e t) 
+  (λ (x)
+    (Drinks x))) 
+
+(defden Snores (-> e t) #:uninterpreted)
+(defden snores (-> e t) 
+  (λ (x)
+    (Snores x))) 
+
+(defden Man (-> e t) #:uninterpreted)
+(defden man (-> e t) 
+  (λ (x)
+    (Man x))) 
 
 ;; type <e,<e,t>> definitions
-(defden Loves (-> e (-> e t)) #:uninterpreted)  ; 
-(defden loves (-> e (-> e t))                   ; really shouldn't be uninterpreted, so define 'dummy' uninterpreted 'Loves' to refer to
+(defden Loves (-> e (-> e t)) #:uninterpreted) 
+(defden loves (-> e (-> e t))                  
   (λ (y)
     (λ (x)
       (y (Loves x)))))
 
 ;; type <e,<e,<e,t>>> definitions
-(defden introduces (-> e (-> e (-> e t))) #:uninterpreted)
+(defden Introduces (-> e (-> e (-> e t))) #:uninterpreted)
+(defden introduces (-> e (-> e (-> e t)))
+  (λ (z)
+    (λ (y)
+      (λ (x)
+        (x ((Introduces x) z))))))
+
 
 ;; type <<e,t>,t> definitions
 (defden mary-gq (-> (-> e t) t)   ; 'generalised quantifier' version of Mary
