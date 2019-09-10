@@ -1,0 +1,12 @@
+* Frege
+An early prototype for an implementation of a Montagovian semantics in Racket, realising a compositional derivational typed semantics for natural language. 
+
+* To use
+Run =use-lingobj.rkt= in Racket. A number of example linguistic objects are defined.
+
+Currently semantic expressions are composed using a lisp-like^{1} syntax. So the denotation of "Mary snores" can be expressed as =(mary snores)= or =(snores mary)=; the denotation of "Mary loves Bill" as =(mary (loves bill))= or =((loves bill) mary)= or =(mary (bill loves))= or =((bill loves) mary)=.
+
+You can form arbitrary expressions including lambdas, e.g. =(λ ([x e]) (λ ([y e]) (and (snores x) (snores y))))= (equivalent to =λxλy[Snore(x) ∧ Snore(y)]=) or =(λ ([P (-> e t)]) (P bill))= (equivalent to λP∈D_{<e,t>}[P(b)]). 
+
+
+fn1: Lisp-like; there is no requirement that the first element in an evaluated expression be a procedure.
