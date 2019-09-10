@@ -27,14 +27,16 @@ Frege currently checks to make sure that the composition of elements is valid ac
 
 ** Types
 Currently types are represented in a lisp-like syntax (the Frege =->= is equivalent to the standard =,= but in prefix notation). Here are some equivalences:
-
-|--------------------+-------------------------------|
-| <e, t>             | (-> e t)                      |
-|--------------------+-------------------------------|
-| <e, <e, t>>        | (-> e (-> e t))               |
-|--------------------+-------------------------------|
-| <<e,t>,<<e,t>, t>> | (-> (-> e t) (-> (-> e t) t)) |
-|--------------------+-------------------------------|
+|---------------------------+-------------------------------|
+| Montagoid Lambda Calculus | Frege                         |
+|---------------------------+-------------------------------|
+|---------------------------+-------------------------------|
+| <e, t>                    | (-> e t)                      |
+|---------------------------+-------------------------------|
+| <e, <e, t>>               | (-> e (-> e t))               |
+|---------------------------+-------------------------------|
+| <<e,t>,<<e,t>, t>>        | (-> (-> e t) (-> (-> e t) t)) |
+|---------------------------+-------------------------------|
 
 
 fn1: Lisp-like; there is no requirement that the first element in an evaluated expression be a procedure.
