@@ -26,7 +26,7 @@ Frege currently checks to make sure that the composition of elements is valid ac
 #+end_src
 
 ** Types
-Currently types are represented in a lisp-like syntax (the Frege =->= is equivalent to the standard =,= but in prefix notation). Here are some equivalences:
+Currently types are represented in a lisp-like syntax (the Frege =->= is equivalent to the standard "," but in prefix notation). Here are some equivalences:
 |---------------------------+-------------------------------|
 | Montagoid Lambda Calculus | Frege                         |
 |---------------------------+-------------------------------|
