@@ -190,7 +190,7 @@
 
 
 (define-binding-ling-syntax/lift (∀ (x) d1) all)
-(define-binding-ling-syntax/lift (∃ (x) d1) all)
+(define-binding-ling-syntax/lift (∃ (x) d1) exists)
 
 
 (define-typed-syntax defden
