@@ -1,8 +1,8 @@
 * Frege
 An early prototype for an implementation of a Montagovian semantics in Racket, realising a compositional derivational typed semantics for natural language. 
 
-* Usage
-Run =use-lingobj.rkt= in Racket. A number of example linguistic objects are defined.
+* Basic Usage
+Run =use-lingobj.rkt= in Racket, which defines number of example linguistic objects.
 
 Currently semantic expressions are composed using a lisp-like^{1} syntax. So ⟦Mary snores⟧ can be expressed as =(mary snores)= or =(snores mary)=; the denotation of ⟦Mary loves Bill⟧ as =(mary (loves bill))= or =((loves bill) mary)= or =(mary (bill loves))= or =((bill loves) mary)=.
 
@@ -17,7 +17,7 @@ And λP∈D_{<e,t>}[P(b)] as:
 (λ ([P (-> e t)]) (P bill))
 #+end_src
 
-Frege currently checks to make sure that the composition of elements is valid according to the types of the elements, thus the following, equivalent to λP∈D_{<e,t>}[P(b)](m) produces an error:
+Frege currently checks to make sure that the composition of elements is valid according to the types of the elements, thus the following –  equivalent to λP∈D_{<e,t>}[P(b)](m) – produces an error:
 
 #+begin_src racket
 > ((λ ([P (-> e t)]) (P bill)) mary)
@@ -35,8 +35,10 @@ Currently types are represented in a lisp-like syntax (the Frege =->= is equival
 |---------------------------+-------------------------------|
 | <e, <e, t>>               | (-> e (-> e t))               |
 |---------------------------+-------------------------------|
+| <e, <e, <e, t>>>          | (-> e (-> e (-> e t)))        |
+|---------------------------+-------------------------------|
 | <<e,t>,<<e,t>, t>>        | (-> (-> e t) (-> (-> e t) t)) |
 |---------------------------+-------------------------------|
 
 
-fn1: Lisp-like; there is no requirement that the first element in an evaluated expression be a procedure.
+fn1: Lisp-*like*: there is no requirement that the first element in an evaluated expression be a procedure.

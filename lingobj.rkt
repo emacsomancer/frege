@@ -1,3 +1,5 @@
+;; Copyright 2019-2020 - Benjamin Slade & Jesse A. Tov
+
 #lang turnstile/lang
 
 (provide (rename-out [L:#%app #%app]
