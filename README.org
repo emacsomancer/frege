@@ -1,6 +1,8 @@
 * Frege
 [[./images/frege-racket-lc.jpg]]
-An early prototype for an implementation of a Montagovian semantics in Racket, realising a compositional derivational typed semantics for natural language. 
+An early prototype for an implementation of a Montagovian semantics in Racket, realising a compositional derivational typed semantics for natural language.
+
+[Active development move from Gitlab original forge at [[https://gitlab.com/emacsomancer/frege/][https://gitlab.com/emacsomancer/frege/]].]
 
 * Basic Usage
 Run =use-lingobj.rkt= in Racket, which defines number of example linguistic objects.
