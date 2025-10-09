@@ -1,4 +1,5 @@
 * Frege
+[[./images/frege-racket-lc.jpg]]
 An early prototype for an implementation of a Montagovian semantics in Racket, realising a compositional derivational typed semantics for natural language. 
 
 * Basic Usage
