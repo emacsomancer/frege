@@ -28,6 +28,9 @@ Frege currently checks to make sure that the composition of elements is valid ac
 ; #%app: mismatch: left=(-> (-> e t) t) right=e
 #+end_src
 
+** Screenshots
+[[./images/screenshot02.png]]
+
 ** Types
 Currently types are represented in a lisp-like syntax (the Frege =->= is equivalent to the standard "," but in prefix notation). Here are some equivalences:
 |---------------------------+-------------------------------|
