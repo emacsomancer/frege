@@ -1,5 +1,5 @@
 * Frege
-![[./images/frege-racket-lc.jpg]]
+#+HTML: <p align="center"><img src="./images/frege-racket-lc.jpg" width="500" alt="image of Gottlob Frege with lambda mark on his forehead"></p>
 
 An early prototype for an implementation of a Montagovian semantics in Racket, realising a compositional derivational typed semantics for natural language.
 
