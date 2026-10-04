@@ -2,16 +2,19 @@
 #+OPTIONS: toc:nil num:nil
 
 * Frege
-#+HTML: <p align="center"><img src="./images/frege-racket-lc.jpg" width="500" alt="image of Gottlob Frege with lambda mark on his forehead"></p>
-
+#+begin_export html
+<p align="center">
+  <img src="./images/frege-racket-lc.jpg" width="500" alt="image of Gottlob Frege with lambda mark on his forehead">
+</p>
+#+end_export
 A prototype for an implementation of a Montagovian semantics in Racket, realising a compositional derivational typed semantics for natural language.
 
-[Active development moved here from Gitlab original forge repo at [[https://gitlab.com/emacsomancer/frege/][https://gitlab.com/emacsomancer/frege/]].]
+(Active development moved here from the original [[https://gitlab.com/emacsomancer/frege/][GitLab forge repository]].)
 
 * Basic Usage
 Run =use-lingobj.rkt= in Racket, which defines number of example linguistic objects.
 
-Currently semantic expressions are composed using a lisp-like^{1} syntax. So ⟦Mary snores⟧ can be expressed as =(mary snores)= or =(snores mary)=; the denotation of ⟦Mary loves Bill⟧ as =(mary (loves bill))= or =((loves bill) mary)= or =(mary (bill loves))= or =((bill loves) mary)=.
+Currently semantic expressions are composed using a lisp-like[fn:1] syntax. So ⟦Mary snores⟧ can be expressed as =(mary snores)= or =(snores mary)=; the denotation of ⟦Mary loves Bill⟧ as =(mary (loves bill))= or =((loves bill) mary)= or =(mary (bill loves))= or =((bill loves) mary)=.
 
 You can form arbitrary expressions including lambdas, e.g. λxλy[Snore(x) ∧ Snore(y)] is currently represented in Frege as:
 
@@ -40,7 +43,6 @@ Currently types are represented in a lisp-like syntax (the Frege =->= is equival
 |---------------------------+-------------------------------|
 | Montagoid Lambda Calculus | Frege                         |
 |---------------------------+-------------------------------|
-|---------------------------+-------------------------------|
 | <e, t>                    | (-> e t)                      |
 |---------------------------+-------------------------------|
 | <e, <e, t>>               | (-> e (-> e t))               |
@@ -51,4 +53,4 @@ Currently types are represented in a lisp-like syntax (the Frege =->= is equival
 |---------------------------+-------------------------------|
 
 
-fn1: Lisp-*like*: there is no requirement that the first element in an evaluated expression be a procedure.
+fn-1: Lisp-*like*: there is no requirement that the first element in an evaluated expression be a procedure.
