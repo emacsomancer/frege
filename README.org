@@ -1,5 +1,5 @@
 * Frege
-[[./images/frege-racket-lc.jpg]]
+[[images/frege-racket-lc.jpg]]
 An early prototype for an implementation of a Montagovian semantics in Racket, realising a compositional derivational typed semantics for natural language.
 
 [Active development move from Gitlab original forge at [[https://gitlab.com/emacsomancer/frege/][https://gitlab.com/emacsomancer/frege/]].]
