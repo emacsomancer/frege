@@ -1,7 +1,7 @@
 #+TITLE: Frege, montagoid natural language semantics, implemented in Racket Scheme
 #+OPTIONS: toc:nil num:nil
 
-* Frege
+* Overview
 #+begin_export html
 <p align="center">
   <img src="./images/frege-racket-lc.jpg" width="500" alt="image of Gottlob Frege with lambda mark on his forehead">
