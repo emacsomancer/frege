@@ -14,7 +14,7 @@ A prototype for an implementation of a Montagovian semantics in Racket, realisin
 * Basic Usage
 Run =use-lingobj.rkt= in Racket, which defines number of example linguistic objects.
 
-Currently semantic expressions are composed using a lisp-like[fn:1] syntax. So ⟦Mary snores⟧ can be expressed as =(mary snores)= or =(snores mary)=; the denotation of ⟦Mary loves Bill⟧ as =(mary (loves bill))= or =((loves bill) mary)= or =(mary (bill loves))= or =((bill loves) mary)=.
+Currently semantic expressions are composed using a lisp-like[[#fn1][1]] syntax. So ⟦Mary snores⟧ can be expressed as =(mary snores)= or =(snores mary)=; the denotation of ⟦Mary loves Bill⟧ as =(mary (loves bill))= or =((loves bill) mary)= or =(mary (bill loves))= or =((bill loves) mary)=.
 
 You can form arbitrary expressions including lambdas, e.g. λxλy[Snore(x) ∧ Snore(y)] is currently represented in Frege as:
 
@@ -53,4 +53,5 @@ Currently types are represented in a lisp-like syntax (the Frege =->= is equival
 |---------------------------+-------------------------------|
 
 
-[fn:1] Lisp-*like*: there is no requirement that the first element in an evaluated expression be a procedure.
+# <<fn1>>
+[1] Lisp-*like*: there is no requirement that the first element in an evaluated expression be a procedure.
