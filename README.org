@@ -53,4 +53,4 @@ Currently types are represented in a lisp-like syntax (the Frege =->= is equival
 |---------------------------+-------------------------------|
 
 
-[fn1] Lisp-*like*: there is no requirement that the first element in an evaluated expression be a procedure.
+[fn:1] Lisp-*like*: there is no requirement that the first element in an evaluated expression be a procedure.
